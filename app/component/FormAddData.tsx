@@ -32,10 +32,10 @@ export const FormAddData = ({handleAfterSubmit}: FormAddDataProps) => {
     const onSubmit: SubmitHandler<IFormInput>  = async(data) => {
 
         const newData = {
-            userId: data.userId,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            sleepTime: Number(data.sleepTime),
+            user_id: data.userId,
+            first_name: data.firstName,
+            last_name: data.lastName,
+            sleep_time: Number(data.sleepTime),
             date: data.date,
         }
         

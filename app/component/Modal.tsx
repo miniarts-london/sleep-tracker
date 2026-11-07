@@ -18,7 +18,7 @@ export function Modal({ open, data, setModalOpen, children }: ModalProps) {
         const getDetails = async() => {
         
         const details = await getAssetDetails(data.user_id)
-        setAssetDetail(details.data)
+        setAssetDetail(details)
        }
        
        getDetails()

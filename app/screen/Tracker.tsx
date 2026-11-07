@@ -36,7 +36,7 @@ export function Tracker({ data }: {data: EntryDetail[]}) {
   const handleDrawer = async(val:{success: boolean, message:string[]}) => {
     if (val.success === true){
       const data = await fetchAssetListFromAPI()
-      setLoadedData(data.data)
+      setLoadedData(data)
       setOpen(false)
     } 
     setMessage({

@@ -15,7 +15,7 @@ export default async function LibraryScreen() {
           <h1 className="text-5xl font-black mb-10">Sleep tracker</h1>
         </div>
 
-        {data ? <Tracker data={data?.data || []} /> : <>Sorry, no data</>}
+        {data ? <Tracker data={data || []} /> : <>Sorry, no data</>}
       </main>
   )
 }
