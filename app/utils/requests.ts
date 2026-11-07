@@ -1,5 +1,5 @@
 
-const host = 'https://service-sleep-tracker.vercel.app'
+const host = 'https://sleep-tracker-api.vercel.app'
 
 export function ssrApiGet(
     url: string,
@@ -37,7 +37,7 @@ export async function getAssetDetails(
     id: string
   ) 
   {
-    const url = `${host}/api/${id}`
+    const url = `${host}/api/users/${id}/entries`
   
     const res = await ssrApiGet(url, false)
 
@@ -50,7 +50,7 @@ export async function getAssetDetails(
 }
 
 export async function fetchAssetListFromAPI(){
-  const url = `${host}/api`
+  const url = `${host}/api/entries`
  
   const res = await ssrApiGet(url, false)
 
@@ -62,7 +62,7 @@ export async function fetchAssetListFromAPI(){
 }
 
 export async function addNewData(data:any){
-  const url = `${host}/api/addData`
+  const url = `${host}/api/entries`
  
   const res = await ssrApiPost(url, data, false)
 
