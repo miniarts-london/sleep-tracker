@@ -1,18 +1,39 @@
 import React from 'react'
 import { TextField, Box, FormControl, FormHelperText } from '@mui/material'
 import { addNewData } from '../utils/requests'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 
 interface IFormInput {
     userId: string
     firstName: string
     lastName: string
     sleepTime: number
-    date:string
-  }
+    date: string
+}
+
+// Field names as returned by the API (snake_case)
+type ApiFieldName = 'user_id' | 'first_name' | 'last_name' | 'sleep_time' | 'date'
+
+interface ApiErrorDetail {
+    fieldName: ApiFieldName
+    message?: string
+}
+
+type AddDataResponse =
+    | { success: true; [key: string]: unknown }
+    | { success: false; details?: ApiErrorDetail[] }
+
+// Map API field names to the form's field names
+const apiFieldToFormField: Record<ApiFieldName, keyof IFormInput> = {
+    user_id: 'userId',
+    first_name: 'firstName',
+    last_name: 'lastName',
+    sleep_time: 'sleepTime',
+    date: 'date',
+}
 
 interface FormAddDataProps {
-    handleAfterSubmit: (val: any) => void
+    handleAfterSubmit: (val: AddDataResponse) => void
 }
 
 export const FormAddData = ({handleAfterSubmit}: FormAddDataProps) => {
@@ -39,18 +60,21 @@ export const FormAddData = ({handleAfterSubmit}: FormAddDataProps) => {
             date: data.date,
         }
         
-        const res = await addNewData(newData)
+        const res: AddDataResponse | undefined = await addNewData(newData)
 
         if (res){
             handleAfterSubmit(res)
-            if(!res.success){
-                res.error_fields.forEach((item:any) => {
-                    setError(item, {message: `Not a valid value for ${item} field`})
+            if(res.success === false && res.details){
+                res.details.forEach((item) => {
+                    const formField = apiFieldToFormField[item.fieldName]
+                    if (formField) {
+                        setError(formField, {message: item.message ?? `Not a valid value for ${item.fieldName} field`})
+                    }
                 })
             }
         }
     }
-
+    
     return(
         <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
