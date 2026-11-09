@@ -6,7 +6,7 @@ import { EntryDetail } from '../models/assets'
 import Table from '../component/Table'
 import { Button, Drawer, Alert } from '@mui/material'
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar'
-import { FormAddData } from '../component/FormAddData'
+import { FormAddData, AddDataResponse } from '../component/FormAddData'
 import {fetchAssetListFromAPI } from "../utils/requests"
 
 type ModalDataProps = {
@@ -33,14 +33,20 @@ export function Tracker({ data }: {data: EntryDetail[]}) {
     setModalData(item)
   }
 
-  const handleDrawer = async(val:{success: boolean, message:string[]}) => {
+  const handleDrawer = async(val: AddDataResponse) => {
     if (val.success === true){
       const data = await fetchAssetListFromAPI()
       setLoadedData(data)
       setOpen(false)
-    } 
+    }
+    // The API returns { success, details } – build the snackbar text from that
+    const messages = val.success
+      ? ['Successfully added!']
+      : val.details?.length
+        ? val.details.map((d) => d.message ?? `Not a valid value for ${d.fieldName} field`)
+        : ['Failed to add entry']
     setMessage({
-      message: val.message,
+      message: messages,
       success: val.success
     })
     setOpenSnackbar(true)

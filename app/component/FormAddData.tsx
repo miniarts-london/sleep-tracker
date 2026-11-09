@@ -14,14 +14,15 @@ interface IFormInput {
 // Field names as returned by the API (snake_case)
 type ApiFieldName = 'user_id' | 'first_name' | 'last_name' | 'sleep_time' | 'date'
 
-interface ApiErrorDetail {
+export interface ApiErrorDetail {
     fieldName: ApiFieldName
     message?: string
 }
 
-type AddDataResponse =
-    | { success: true; [key: string]: unknown }
-    | { success: false; details?: ApiErrorDetail[] }
+// Matches sleep-tracker-api POST /api/entries response
+export type AddDataResponse =
+    | { success: true; details: null }
+    | { success: false; details?: ApiErrorDetail[] | null }
 
 // Map API field names to the form's field names
 const apiFieldToFormField: Record<ApiFieldName, keyof IFormInput> = {
