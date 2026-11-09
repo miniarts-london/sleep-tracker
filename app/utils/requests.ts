@@ -1,5 +1,5 @@
 
-const host = 'http://localhost:3001'//'https://sleep-tracker-api.vercel.app'
+const host = 'https://sleep-tracker-api.vercel.app'
 
 export function ssrApiGet(
     url: string,
