@@ -1,5 +1,11 @@
+// NEXT_PUBLIC_ so it's inlined into the client bundle too (Modal/FormAddData call the API from the browser)
+const apiHost = process.env.NEXT_PUBLIC_API_HOST
 
-const host = 'https://sleep-tracker-api.vercel.app'
+if (!apiHost) {
+  throw new Error('NEXT_PUBLIC_API_HOST is not set')
+}
+
+const host = apiHost.replace(/\/+$/, '')
 
 export function ssrApiGet(
     url: string,
@@ -28,7 +34,7 @@ export function ssrApiPost(
     },
     body: JSON.stringify(data),
   }).catch((err) => {
-    console.log(`Failed ssrApiGet '${url}'`)
+    console.log(`Failed ssrApiPost '${url}'`)
     throw err
   })
 }
