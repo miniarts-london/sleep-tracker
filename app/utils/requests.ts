@@ -1,14 +1,8 @@
 import { clearToken, getToken, type Profile } from './auth'
 import type { EntryDetail } from '../models/assets'
+import { Config } from '../config'
 
-// NEXT_PUBLIC_ so it's inlined into the client bundle (all API calls run in the browser)
-const apiHost = process.env.NEXT_API_HOST
-
-if (!apiHost) {
-  throw new Error('NEXT_API_HOST is not set')
-}
-
-const host = apiHost.replace(/\/+$/, '')
+const host = Config.apiHost.replace(/\/+$/, '')
 
 export const LOGIN_PATH = '/login'
 
