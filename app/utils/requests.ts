@@ -2,10 +2,10 @@ import { clearToken, getToken, type Profile } from './auth'
 import type { EntryDetail } from '../models/assets'
 
 // NEXT_PUBLIC_ so it's inlined into the client bundle (all API calls run in the browser)
-const apiHost = process.env.NEXT_PUBLIC_API_HOST
+const apiHost = process.env.NEXT_API_HOST
 
 if (!apiHost) {
-  throw new Error('NEXT_PUBLIC_API_HOST is not set')
+  throw new Error('NEXT_API_HOST is not set')
 }
 
 const host = apiHost.replace(/\/+$/, '')
