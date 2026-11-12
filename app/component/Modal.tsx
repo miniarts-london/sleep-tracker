@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ViewChart } from './ViewChart'
-import { getAssetDetails } from '../utils/requests'
+import { getAssetDetails, UnauthorizedError } from '../utils/requests'
 import { EntryDetail, ModalDataProps } from '../models/assets'
 
 interface ModalProps{
@@ -13,15 +13,22 @@ interface ModalProps{
 export function Modal({ open, data, setModalOpen, children }: ModalProps) {
     
     const [assetDetail, setAssetDetail] = useState<EntryDetail[]>()
+    const [error, setError] = useState<string>()
 
     useEffect(()=>{
         const getDetails = async() => {
-        
-        const details = await getAssetDetails(data.user_id)
-        setAssetDetail(details)
-       }
-       
-       getDetails()
+            setAssetDetail(undefined)
+            setError(undefined)
+            try {
+                setAssetDetail(await getAssetDetails(data.user_id))
+            } catch (err) {
+                if (err instanceof UnauthorizedError) return // redirecting to /login
+                // e.g. 403 when opening another user's entries
+                setError(err instanceof Error ? err.message : 'Failed to fetch data')
+            }
+        }
+
+        getDetails()
     },[data])
 
     const handleSetModalOpen = (e: React.MouseEvent<HTMLElement>) => {
@@ -44,6 +51,7 @@ export function Modal({ open, data, setModalOpen, children }: ModalProps) {
                         </button>
                     </div>
                 
+                    { error && <p className="p-4 text-red-700">{error}</p> }
                     { assetDetail && <ViewChart data={assetDetail}/> }
                                    
                     {children}
